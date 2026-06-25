@@ -80,7 +80,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         Widget dashboard = role == 'teacher' ? const TeacherDashboard() : const StudentDashboard();
 
         if (mounted) {
-          await checkForUpdate(context);
+          final canContinue = await checkForUpdate(context);
+          if (!canContinue || !mounted) return;
         }
         
         if (!mounted) return;

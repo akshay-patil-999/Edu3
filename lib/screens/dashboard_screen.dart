@@ -9,6 +9,8 @@ import './student/join_tuition_screen.dart';
 import './teacher/student_list_screen.dart';
 import './student/feedback_screen.dart';
 import './common/profile_screen.dart';
+import './common/notifications_center.dart';
+import './common/my_tuition_screen.dart';
 import './auth/login_screen.dart';
 import '../services/update_service.dart';
 
