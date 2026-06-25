@@ -7,6 +7,7 @@ import '../../core/constants/app_constants.dart';
 import 'onboarding_screen.dart';
 import 'login_screen.dart';
 import '../teacher/teacher_dashboard.dart';
+import '../../services/update_service.dart';
 import '../student/student_dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -77,7 +78,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if (authProvider.isLoggedIn) {
         final role = authProvider.userRole;
         Widget dashboard = role == 'teacher' ? const TeacherDashboard() : const StudentDashboard();
+
+        if (mounted) {
+          await checkForUpdate(context);
+        }
         
+        if (!mounted) return;
+
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, anim1, anim2) => dashboard,

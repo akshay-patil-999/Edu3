@@ -23,6 +23,7 @@ class TeacherDashboard extends StatefulWidget {
 }
 
 class _TeacherDashboardState extends State<TeacherDashboard> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
   TuitionModel? _selectedTuitionForHub;
   final FirestoreService _firestoreService = FirestoreService();
@@ -49,6 +50,46 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     super.dispose();
   }
 
+  Widget _buildAppDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppTheme.primaryColor, Color(0xFF5BA3F5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'Vedo Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.system_update_alt),
+            title: const Text('Check for updates'),
+            onTap: () {
+              Navigator.of(context).pop();
+              checkForUpdate(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('App info'),
+            subtitle: const Text('Check app status and version'),
+            onTap: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
@@ -63,8 +104,15 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     ];
 
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: _buildAppDrawer(context),
       backgroundColor: isDark ? AppTheme.bgDark : AppTheme.backgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          tooltip: 'Menu',
+        ),
         title: Row(
           children: [
             Container(
@@ -94,6 +142,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           const SizedBox(width: 8),
         ],
       ),
+      drawerEnableOpenDragGesture: true,
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
