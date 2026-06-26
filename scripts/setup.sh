@@ -12,20 +12,17 @@ PROJECT_DIR="/workspaces/Edu3"
 # JAVA
 #############################################
 
+#############################################
+# JAVA
+#############################################
+
 echo ""
 echo "Checking Java..."
 
-JAVA_DIR=$(find /usr/local/sdkman/candidates/java \
--maxdepth 1 \
--type d \
--name "21*" | head -n 1)
+JAVA_BIN=$(which java || true)
 
-if [ -n "$JAVA_DIR" ]; then
-    export JAVA_HOME="$JAVA_DIR"
-
-elif [ -d "/usr/local/sdkman/candidates/java/current" ]; then
-    export JAVA_HOME="/usr/local/sdkman/candidates/java/current"
-
+if [ -n "$JAVA_BIN" ]; then
+    export JAVA_HOME=$(dirname $(dirname $(readlink -f "$JAVA_BIN")))
 else
     echo "❌ Java not found"
     exit 1
@@ -35,9 +32,9 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 hash -r
 
-echo "Using:"
+echo "Using Java:"
 java -version
-
+echo "JAVA_HOME=$JAVA_HOME"
 #############################################
 # FLUTTER
 #############################################
